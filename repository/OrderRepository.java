@@ -56,7 +56,7 @@ public class OrderRepository {
     String queryToCallSP = "call addToCart(?,?,?)";
 
     //// TODO present SP
-    public void callAddToCartSP(int customerId, Integer orderId, int itemId) {
+    public void callAddToCartSP(int customerId, Integer orderId, int itemId) throws SQLException {
         //set orderId as Integer so it can handle null. Integer is class (reference data type) so it can have null as value
         try (Connection con = DriverManager.getConnection(
                 p.getProperty("connection"),
@@ -76,9 +76,6 @@ public class OrderRepository {
 
             cstmt.setInt(3, itemId);
             cstmt.executeQuery();
-
-        } catch(SQLException e){
-            throw new RuntimeException(e);
         }
     }
 

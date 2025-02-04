@@ -5,6 +5,7 @@ import repository.OrderRepository;
 import repository.ProductRepository;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -135,10 +136,12 @@ public class OrderSystem {
             String colour = itemInput[0];
             int size = Integer.parseInt(itemInput[1]);
 
+            boolean itemExists = false;
+
             //to see if typed item is matching with DB
             for (Item item : itemList) {
                 if (item.getColour().equalsIgnoreCase(colour) && item.getSize() == size) {
-                    System.out.println("Item " + item.getColour() + " " + item.getSize() + " has been added to the list.");
+                    itemExists = true;
 
                     try {
                         if (activeOrder != null) {
@@ -148,16 +151,24 @@ public class OrderSystem {
                             orderRepository.callAddToCartSP(user.getId(), null, item.getId());
                             //if there is no active order no., use null as value, then SP will create new order id
                         }
+                        System.out.println("Item " + item.getColour() + " " + item.getSize() + " has been added to the list.");
                         return;
                     }
-                    catch (Exception e) {
-                        System.out.println("Something went wrong. Please try again");
-                        System.err.println(e.getMessage());
+                    catch (SQLException e){
+                        System.out.println("Couldn't add item to the cart");
                         break;
                     }
+
+                    catch (Exception e) {
+                        System.out.println("Something went wrong. Please try again");
+                        break;
+                    }
+
                 }
             }
-            System.out.println("Product you typed: " + colour + " " + size + "doesn't exist.");
+            if (!itemExists) {
+                System.out.println("Product you typed: " + colour + " " + size + " doesn't exist.");
+            }
         }
     }
 
