@@ -131,10 +131,6 @@ public class OrderSystem {
             if (itemInput[0].equals("1")) {
                 return;
             }
-            else if (!itemInput[0].equals("1")) {
-                System.out.println("You have chosen wrongly.");
-                return;
-            }
 
             String colour = itemInput[0];
             int size = Integer.parseInt(itemInput[1]);
